@@ -56,4 +56,17 @@ for col in X.columns:
 if st.button("Predict"):
     input_df = pd.DataFrame([user_input])
 
-    # Encode categorical inputs safe
+    # Encode categorical inputs safely
+    for col in label_encoders:
+        input_df[col] = label_encoders[col].transform(input_df[col])
+
+    input_scaled = scaler.transform(input_df)
+    prediction = model.predict(input_scaled)[0]
+
+    st.markdown("---")
+    st.subheader("Prediction Result")
+
+    if prediction == 1:
+        st.success("✅ Customer is SATISFIED")
+    else:
+        st.error("❌ Customer is NOT SATISFIED")
